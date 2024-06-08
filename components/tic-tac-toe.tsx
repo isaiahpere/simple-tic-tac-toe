@@ -1,9 +1,23 @@
 "use client";
 import useTicTacToe from "@/hooks/use-tic-tac-toe";
 import React from "react";
+import { cn } from "@/lib/utils";
+import clsx from "clsx";
 
-const TicTacToe = () => {
-  const { board, getStatusMessage, handleClick, resetGame } = useTicTacToe();
+enum BoardSizes {
+  three = 3,
+  four = 4,
+  five = 5,
+  six = 6,
+}
+export type BoardSizeType = keyof typeof BoardSizes;
+
+interface IProps {
+  boardSize: BoardSizes;
+}
+const TicTacToe = ({ boardSize }: IProps) => {
+  const { board, getStatusMessage, handleClick, resetGame } =
+    useTicTacToe(boardSize);
 
   return (
     <div data-name="game" className="my-0 mx-auto text-center p-5">
@@ -21,7 +35,14 @@ const TicTacToe = () => {
         </button>
       </div>
 
-      <div dta-name="board" className="grid grid-cols-3 justify-center gap-0">
+      <div
+        dta-name="board"
+        className={cn("grid grid-cols-3 justify-center gap-0", {
+          "grid-cols-4": boardSize === 4,
+          "grid-cols-5": boardSize === 5,
+          "grid-cols-6": boardSize === 6,
+        })}
+      >
         {board.map((value, index) => (
           <button
             key={index}
